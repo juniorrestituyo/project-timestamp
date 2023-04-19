@@ -50,6 +50,7 @@ function isValidDate(dateString) {
   return d.toISOString().slice(0,10) === dateString
 }
 
+// Function to convert to Timestamp
 function toTimestamp(strDate) {
   const dt = Date.parse(strDate)
   return dt / 1000
