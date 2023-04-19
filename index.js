@@ -28,24 +28,25 @@ app.get("/api", function (req, res) {
 app.get("/api/:date", function (req, res) {
   try {
     const paramsData = req.params.date
+    const regex = /^[0-9]+$/
+    const numbersOnly = regex.test(paramsData)
 
-    if (isValidDate(paramsData)) {
-      const unixDate = toTimestamp(paramsData) * 1000
+    if (!numbersOnly) {
+      const unixDate = Date.parse(paramsData)
       const utcDate = new Date(unixDate).toUTCString()
-      res.json({"unix": unixDate, "utc": utcDate})
 
-    } else if (!paramsData.includes("-")) {
-      const unixDate = parseInt(paramsData)
-      const utcDate = new Date(unixDate).toUTCString()
-      res.json({"unix": unixDate, "utc": utcDate})
+      unixDate
+      ? res.json({unix: unixDate, utc: utcDate})
+      : res.json({error : "Invalid Date"})
       
     } else {
-      res.json({"error" : "Invalid Date"})
-      
+      const unixDate = parseInt(paramsData)
+      const utcDate = new Date(unixDate).toUTCString()
+      res.json({unix: unixDate, utc: utcDate})
     }
 
   } catch (err) {
-    res.json({"error" : "Invalid Date"})
+    res.json({error : "Invalid Date"})
     
   }
 })
