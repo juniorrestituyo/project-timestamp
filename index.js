@@ -19,16 +19,17 @@ app.get("/", function (req, res) {
 })
 
 // your first API endpoint... 
+app.get("/api", function (req, res) {
+  const utcDate = new Date().toUTCString()
+  const unixDate = toTimestamp(utcDate) * 1000
+  res.json({"unix": unixDate, "utc": utcDate})
+})
+      
 app.get("/api/:date", function (req, res) {
   try {
     const paramsData = req.params.date
 
-    if (!paramsData) {
-      const utcDate = new Date().toUTCString()
-      const unixDate = toTimestamp(utcDate) * 1000
-      res.json({"unix": unixDate, "utc": utcDate})
-      
-    } else if (isValidDate(paramsData)) {
+    if (isValidDate(paramsData)) {
       const unixDate = toTimestamp(paramsData) * 1000
       const utcDate = new Date(unixDate).toUTCString()
       res.json({"unix": unixDate, "utc": utcDate})
